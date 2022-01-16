@@ -23,11 +23,9 @@ class TransactionListState extends State<TransactionList> {
         floatingActionButton: FloatingActionButton(
           child: const Icon(Icons.add),
           onPressed: () {
-            Navigator.push(
+            Navigator.push<Transaction>(
               context,
-              MaterialPageRoute<Transaction>(builder: (context) {
-                return TransactionForm();
-              }),
+              MaterialPageRoute(builder: (context) => const TransactionForm()),
             ).then((receivedTransaction) => updateList(receivedTransaction));
           },
         ),

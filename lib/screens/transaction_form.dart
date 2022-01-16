@@ -1,13 +1,19 @@
 import 'package:bytebank/components/editor.dart';
-import 'package:bytebank/models/transaction.dart';
+import 'package:bytebank/models/Transaction.dart';
 import 'package:flutter/material.dart';
 
-class TransactionForm extends StatelessWidget {
-  TransactionForm({Key? key}) : super(key: key);
+class TransactionForm extends StatefulWidget {
+  const TransactionForm({Key? key}) : super(key: key);
 
-  final TextEditingController _controllerAccountNumber =
-      TextEditingController();
-  final TextEditingController _controllerValue = TextEditingController();
+  @override
+  State<StatefulWidget> createState() {
+    return TransactionFormState();
+  }
+}
+
+class TransactionFormState extends State<TransactionForm> {
+  final _controllerAccountNumber = TextEditingController();
+  final _controllerValue = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
