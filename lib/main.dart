@@ -19,7 +19,7 @@ class TransactionForm extends StatelessWidget {
   TransactionForm({Key? key}) : super(key: key);
 
   final TextEditingController _controllerAccountNumber =
-      TextEditingController();
+  TextEditingController();
   final TextEditingController _controllerValue = TextEditingController();
 
   @override
@@ -28,32 +28,32 @@ class TransactionForm extends StatelessWidget {
       appBar: AppBar(
         title: const Text("Criando Transferência"),
       ),
-      body: Column(
-        children: [
-          Editor("Número da conta",
-              controller: _controllerAccountNumber, hint: "0000"),
-          Editor("Valor",
-              controller: _controllerValue,
-              hint: "0.00",
-              icon: Icons.monetization_on),
-          ElevatedButton(
-              onPressed: () => _createTransaction(context),
-              child: const Text("Confirmar")),
-        ],
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            Editor("Número da conta",
+                controller: _controllerAccountNumber, hint: "0000"),
+            Editor("Valor",
+                controller: _controllerValue,
+                hint: "0.00",
+                icon: Icons.monetization_on),
+            ElevatedButton(
+                onPressed: () => _createTransaction(context),
+                child: const Text("Confirmar")),
+          ],
+        ),
       ),
     );
   }
 
   void _createTransaction(BuildContext context) {
     final value = double.tryParse(_controllerValue.text);
-    final accountNumber =
-        int.tryParse(_controllerAccountNumber.text);
+    final accountNumber = int.tryParse(_controllerAccountNumber.text);
 
     if (value != null && accountNumber != null) {
       final transaction = Transaction(value, accountNumber);
 
-      ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text("Transferencia criada")));
+      Navigator.pop<Transaction>(context, transaction);
     }
   }
 }
@@ -84,32 +84,53 @@ class Editor extends StatelessWidget {
   }
 }
 
-class TransactionList extends StatelessWidget {
+class TransactionList extends StatefulWidget {
+
+  final List<Transaction> _list = List.empty(growable: true);
+
+  @override
+  State<StatefulWidget> createState() {
+    return TransactionListState();
+  }
+}
+
+
+class TransactionListState extends State<TransactionList> {
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text("Transferências"),
-      ),
-      floatingActionButton: FloatingActionButton(
-        child: const Icon(Icons.add),
-        onPressed: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context) {
-            return TransactionForm();
-          }));
-        },
-      ),
-      body: Column(
-        children: [
-          TransactionItem(Transaction(123.00, 1234)),
-          TransactionItem(Transaction(3.00, 124)),
-          TransactionItem(Transaction(1203.00, 1234)),
-          TransactionItem(Transaction(13.00, 123)),
-          TransactionItem(Transaction(123.50, 234)),
-        ],
-      ),
+        appBar: AppBar(
+          title: const Text("Transferências"),
+        ),
+        floatingActionButton: FloatingActionButton(
+          child: const Icon(Icons.add),
+          onPressed: () {
+            final future = Navigator.push<Transaction>(
+                context,
+                MaterialPageRoute(builder: (context) {
+                  return TransactionForm();
+                })
+            );
+
+            future.then((receivedTransaction) {
+              if (receivedTransaction != null) {
+                setState(() {
+                  widget._list.add(receivedTransaction);
+                });
+              }
+            });
+          },
+        ),
+        body: ListView.builder(
+          itemCount: widget._list.length,
+          itemBuilder: (context, index) {
+            return TransactionItem(widget._list[index]);
+          },
+        )
     );
   }
+
 }
 
 class TransactionItem extends StatelessWidget {
