@@ -1,7 +1,7 @@
 import 'package:bytebank/screens/transaction_list.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(ByteBankApp());
+void main() => runApp(const ByteBankApp());
 
 class ByteBankApp extends StatelessWidget {
   const ByteBankApp({Key? key}) : super(key: key);
@@ -12,7 +12,6 @@ class ByteBankApp extends StatelessWidget {
       theme: ThemeData(
         appBarTheme: AppBarTheme(backgroundColor: Colors.green[900]),
         primaryColor: Colors.green[900],
-        accentColor: Colors.blueAccent[700],
       ),
       home: TransactionList(),
     );

@@ -40,7 +40,7 @@ class TransactionForm extends StatelessWidget {
     if (value != null && accountNumber != null) {
       final transaction = Transaction(value, accountNumber);
 
-      Navigator.pop<Transaction>(context, transaction);
+      Navigator.pop(context, transaction);
     }
   }
 }

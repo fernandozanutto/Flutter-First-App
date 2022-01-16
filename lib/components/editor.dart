@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Editor extends StatelessWidget {
-  TextEditingController? controller;
-  String label;
-  String? hint;
-  IconData? icon;
+  final TextEditingController? controller;
+  final String label;
+  final String? hint;
+  final IconData? icon;
 
-  Editor(this.label, {this.controller, this.hint, this.icon});
+  const Editor(this.label, {Key? key, this.controller, this.hint, this.icon}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
